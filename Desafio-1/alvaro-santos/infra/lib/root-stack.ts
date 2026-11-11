@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { AlvaroDatabase } from './database';
 
 export interface AlvaroAgenticPaymentsStackProps extends cdk.StackProps {
   /**
@@ -20,6 +21,8 @@ export interface AlvaroAgenticPaymentsStackProps extends cdk.StackProps {
  * - Hospedagem estática segura via Amazon S3 privado + CloudFront com OAC
  */
 export class AlvaroAgenticPaymentsStack extends cdk.Stack {
+  public readonly database: AlvaroDatabase;
+
   constructor(scope: Construct, id: string, props: AlvaroAgenticPaymentsStackProps) {
     super(scope, id, props);
 
@@ -27,6 +30,11 @@ export class AlvaroAgenticPaymentsStack extends cdk.Stack {
     if (!props.resourcePrefix.startsWith('alvaro-')) {
       throw new Error(`Violação de governança: o prefixo deve iniciar com 'alvaro-'. Recebido: ${props.resourcePrefix}`);
     }
+
+    // Camada de Persistência (Amazon DynamoDB)
+    this.database = new AlvaroDatabase(this, 'Database', {
+      resourcePrefix: props.resourcePrefix,
+    });
 
     // Output inicial para confirmação de síntese do scaffolding
     new cdk.CfnOutput(this, 'ResourcePrefixOutput', {
