@@ -1,0 +1,23 @@
+{
+  "name": "alvaro-agentic-payments-infra",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Infraestrutura como Código (AWS CDK v2 em TypeScript) - Desafio 1 (AWS Cloud)",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "synth": "cdk synth"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "aws-cdk": "^2.180.0",
+    "esbuild": "^0.25.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.7.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.180.0",
+    "constructs": "^10.4.2"
+  }
+}
