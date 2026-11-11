@@ -1,0 +1,41 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment and secrets (NEVER commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# AWS CDK outputs
+cdk.out/
+.cdk.staging/
+*.js.map
+*.d.ts
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
