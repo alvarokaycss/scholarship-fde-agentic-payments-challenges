@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { PaymentsDatabase } from './database';
 import { Auth } from './auth';
 import { FrontendHost } from './frontend-host';
+import { ChatApi } from './api';
 
 export interface AgenticPaymentsStackProps extends cdk.StackProps {
   /**
@@ -26,6 +27,7 @@ export class AgenticPaymentsStack extends cdk.Stack {
   public readonly database: PaymentsDatabase;
   public readonly auth: Auth;
   public readonly frontendHost: FrontendHost;
+  public readonly chatApi: ChatApi;
 
   constructor(scope: Construct, id: string, props: AgenticPaymentsStackProps) {
     super(scope, id, props);
@@ -49,6 +51,14 @@ export class AgenticPaymentsStack extends cdk.Stack {
     this.frontendHost = new FrontendHost(this, 'FrontendHost', {
       resourcePrefix: props.resourcePrefix,
       accountId: this.account,
+    });
+
+    // Camada de Borda da API (API Gateway REST + Streaming + JWT Authorizer)
+    this.chatApi = new ChatApi(this, 'ChatApi', {
+      resourcePrefix: props.resourcePrefix,
+      userPool: this.auth.userPool,
+      allowedOrigin: `https://${this.frontendHost.distribution.distributionDomainName}`,
+      conversasTable: this.database.conversasTable,
     });
 
     // Output inicial para confirmação de síntese do scaffolding
