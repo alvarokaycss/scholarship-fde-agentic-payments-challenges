@@ -1,8 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { AlvaroDatabase } from './database';
+import { PaymentsDatabase } from './database';
 
-export interface AlvaroAgenticPaymentsStackProps extends cdk.StackProps {
+export interface AgenticPaymentsStackProps extends cdk.StackProps {
   /**
    * Prefixo obrigatório para isolamento em conta compartilhada (us-east-1).
    */
@@ -20,10 +20,10 @@ export interface AlvaroAgenticPaymentsStackProps extends cdk.StackProps {
  * - API de streaming NDJSON via Amazon API Gateway
  * - Hospedagem estática segura via Amazon S3 privado + CloudFront com OAC
  */
-export class AlvaroAgenticPaymentsStack extends cdk.Stack {
-  public readonly database: AlvaroDatabase;
+export class AgenticPaymentsStack extends cdk.Stack {
+  public readonly database: PaymentsDatabase;
 
-  constructor(scope: Construct, id: string, props: AlvaroAgenticPaymentsStackProps) {
+  constructor(scope: Construct, id: string, props: AgenticPaymentsStackProps) {
     super(scope, id, props);
 
     // Validação estrita do prefixo de governança
@@ -32,7 +32,7 @@ export class AlvaroAgenticPaymentsStack extends cdk.Stack {
     }
 
     // Camada de Persistência (Amazon DynamoDB)
-    this.database = new AlvaroDatabase(this, 'Database', {
+    this.database = new PaymentsDatabase(this, 'Database', {
       resourcePrefix: props.resourcePrefix,
     });
 

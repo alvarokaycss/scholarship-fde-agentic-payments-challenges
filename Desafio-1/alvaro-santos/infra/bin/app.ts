@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { AlvaroAgenticPaymentsStack } from '../lib/root-stack';
+import { AgenticPaymentsStack } from '../lib/root-stack';
 
 const app = new cdk.App();
 
@@ -15,7 +15,7 @@ const env: cdk.Environment = {
 };
 
 // Stack principal com prefixação de isolamento para conta compartilhada
-new AlvaroAgenticPaymentsStack(app, 'alvaro-agentic-payments-stack', {
+new AgenticPaymentsStack(app, 'alvaro-agentic-payments-stack', {
   stackName: `${RESOURCE_PREFIX}agentic-payments-stack`,
   description: 'Stack principal do Desafio 1: Pagamentos Agênticos com Strands Agent no Bedrock (Bolsista Alvaro Kayc)',
   env,

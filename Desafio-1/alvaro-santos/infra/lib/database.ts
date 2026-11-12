@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 
-export interface AlvaroDatabaseProps {
+export interface PaymentsDatabaseProps {
   /**
    * Prefixo obrigatório para isolamento em conta compartilhada (ex: 'alvaro-').
    */
@@ -22,12 +22,12 @@ export interface AlvaroDatabaseProps {
  * - TTL nativo: Remoção automática e sem custo de intenções expiradas e sessões inativas.
  * - RemovalPolicy.DESTROY: Ambiente de desenvolvimento/avaliação sem deixar recursos órfãos.
  */
-export class AlvaroDatabase extends Construct {
+export class PaymentsDatabase extends Construct {
   public readonly usuariosTable: dynamodb.Table;
   public readonly intencoesTable: dynamodb.Table;
   public readonly conversasTable: dynamodb.Table;
 
-  constructor(scope: Construct, id: string, props: AlvaroDatabaseProps) {
+  constructor(scope: Construct, id: string, props: PaymentsDatabaseProps) {
     super(scope, id);
 
     const { resourcePrefix } = props;
