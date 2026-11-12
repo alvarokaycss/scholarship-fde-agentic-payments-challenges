@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { PaymentsDatabase } from './database';
 import { Auth } from './auth';
+import { FrontendHost } from './frontend-host';
 
 export interface AgenticPaymentsStackProps extends cdk.StackProps {
   /**
@@ -24,6 +25,7 @@ export interface AgenticPaymentsStackProps extends cdk.StackProps {
 export class AgenticPaymentsStack extends cdk.Stack {
   public readonly database: PaymentsDatabase;
   public readonly auth: Auth;
+  public readonly frontendHost: FrontendHost;
 
   constructor(scope: Construct, id: string, props: AgenticPaymentsStackProps) {
     super(scope, id, props);
@@ -41,6 +43,12 @@ export class AgenticPaymentsStack extends cdk.Stack {
     // Camada de Identidade e Autenticação (Amazon Cognito)
     this.auth = new Auth(this, 'Auth', {
       resourcePrefix: props.resourcePrefix,
+    });
+
+    // Camada de Borda Estática (Amazon S3 Privado + CloudFront OAC)
+    this.frontendHost = new FrontendHost(this, 'FrontendHost', {
+      resourcePrefix: props.resourcePrefix,
+      accountId: this.account,
     });
 
     // Output inicial para confirmação de síntese do scaffolding
