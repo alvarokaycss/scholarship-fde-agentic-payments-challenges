@@ -4,6 +4,7 @@ import { PaymentsDatabase } from './database';
 import { Auth } from './auth';
 import { FrontendHost } from './frontend-host';
 import { ChatApi } from './api';
+import { PaymentTools } from './tools';
 
 export interface AgenticPaymentsStackProps extends cdk.StackProps {
   /**
@@ -28,6 +29,7 @@ export class AgenticPaymentsStack extends cdk.Stack {
   public readonly auth: Auth;
   public readonly frontendHost: FrontendHost;
   public readonly chatApi: ChatApi;
+  public readonly paymentTools: PaymentTools;
 
   constructor(scope: Construct, id: string, props: AgenticPaymentsStackProps) {
     super(scope, id, props);
@@ -59,6 +61,12 @@ export class AgenticPaymentsStack extends cdk.Stack {
       userPool: this.auth.userPool,
       allowedOrigin: `https://${this.frontendHost.distribution.distributionDomainName}`,
       conversasTable: this.database.conversasTable,
+    });
+
+    // Camada de Ferramentas Determinísticas (Lambdas de Tools)
+    this.paymentTools = new PaymentTools(this, 'PaymentTools', {
+      resourcePrefix: props.resourcePrefix,
+      usuariosTable: this.database.usuariosTable,
     });
 
     // Output inicial para confirmação de síntese do scaffolding

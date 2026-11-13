@@ -4,8 +4,8 @@ import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as esbuild from 'esbuild';
 import { Construct } from 'constructs';
+import { bundleNode22Lambda } from './lambda-bundler';
 
 export interface ChatApiProps {
   /**
@@ -52,26 +52,7 @@ export class ChatApi extends Construct {
       handler: 'index.handler',
       memorySize: 256,
       timeout: cdk.Duration.minutes(5),
-      code: lambda.Code.fromAsset(apiDir, {
-        bundling: {
-          image: lambda.Runtime.NODEJS_22_X.bundlingImage,
-          local: {
-            tryBundle(outputDir: string): boolean {
-              esbuild.buildSync({
-                entryPoints: [path.join(apiDir, 'index.ts')],
-                bundle: true,
-                platform: 'node',
-                target: 'node22',
-                minify: true,
-                sourcemap: true,
-                external: ['@aws-sdk/*'],
-                outfile: path.join(outputDir, 'index.js'),
-              });
-              return true;
-            },
-          },
-        },
-      }),
+      code: bundleNode22Lambda(path.join(apiDir, 'index.ts'), apiDir),
       environment: {
         CONVERSAS_TABLE_NAME: conversasTable.tableName,
         ALLOWED_ORIGIN: allowedOrigin,
